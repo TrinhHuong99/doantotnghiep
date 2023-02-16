@@ -495,12 +495,18 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.code === 1) {
+                        console.log(res.data.data)
+                        res.data.data.classid = this.classOptions.find(el => el.value == res.data.data.classid).text
+                        res.data.data.subjectid = this.subjectsOptions.find(el => el.value == res.data.data.subjectid).text
+                            // this.rows[index].subjectid = this.subjectsOptions.find(el => el.value == this.rows[index].subjectid).text
                         this.rows.push(res.data.data);
                         this.$refs["modal-primary"].hide();
-                        for (let index = 0; index < this.rows.length; index++) {
-                            this.rows[index].classid =  this.classOptions.find(el => el.value == this.rows[index].classid).text
-                            this.rows[index].subjectid =  this.subjectsOptions.find(el => el.value == this.rows[index].subjectid).text
-                        }
+                        // for (let index = 0; index < this.rows.length; index++) {
+                            // this.rows[index].classid = this.classOptions.find(el => el.value == this.rows[index].classid).text
+                            // this.rows[index].subjectid = this.subjectsOptions.find(el => el.value == this.rows[index].subjectid).text
+                            
+                        // }
+                        console.log(this.rows)
                         this.$nextTick(() => {
                             window.MathJax.typesetPromise();
                         });

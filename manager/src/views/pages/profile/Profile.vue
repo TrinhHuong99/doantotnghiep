@@ -65,7 +65,7 @@ import ProfileAbout from './ProfileAbout.vue'
 import ProfileSuggestedPages from './ProfileSuggestedPages.vue'
 import ProfileTwitterFeed from './ProfileTwitterFeed.vue'
 import ProfilePost from './ProfilePost.vue'
-import ProfileLatestPhotos from './ProfileLatestPhotos.vue'
+import atestPhotos from './atestPhotos.vue'
 import ProfileSuggestion from './ProfileSuggestion.vue'
 import ProfilePolls from './ProfilePolls.vue'
 import profileBottom from './profileBottom.vue'
@@ -81,7 +81,7 @@ export default {
     ProfileSuggestedPages,
     ProfileTwitterFeed,
     ProfilePost,
-    ProfileLatestPhotos,
+    atestPhotos,
     ProfileSuggestion,
     ProfilePolls,
     profileBottom,

@@ -7,7 +7,7 @@
                         <b-form-group label="Tên môn thi" label-for="exam-name">
                             <b-form-input :state="classNameValidation" v-model="examModalData.name" id="exam-name" placeholder="Tên môn thi"></b-form-input>
                             <b-form-invalid-feedback v-if="!classNameValidation" id="input-live-feedback">
-                                Hãy nhập tên môns thi
+                                Hãy nhập tên môn thi
                             </b-form-invalid-feedback>
                         </b-form-group>
                         <b-form-checkbox id="checkbox-1" v-model="examModalData.status" name="checkbox-1" value="1" unchecked-value="0">Xuất bản</b-form-checkbox>

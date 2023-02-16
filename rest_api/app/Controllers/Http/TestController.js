@@ -472,7 +472,8 @@ class TestController {
     }
 
     async getTopicType({ request, response }) {
-        const { id } = request.all()
+        const { id, classid, subjectid } = request.all()
+        console.log(id, classid, subjectid, 'testttttt')
 
         const subjectsList = Database.table('topic_type')
 
@@ -1053,7 +1054,7 @@ class TestController {
         let { page, start, end, name, phone, email, classid, subjectid, mark_status } = request.all()
 
         if (!page) {page = 1}
-        const limit = 50;
+        const limit = 20;
         let testList = Database.table('test_history')
         .leftJoin('contact', 'test_history.contact_id', 'contact.id')
         .join('exam', 'exam.id', 'test_history.exam_id')
@@ -1230,7 +1231,6 @@ class TestController {
               .where('tracking.tracking_hash', tracking_id)
               // .where('tracking.contact_id', contact_id)
               .first()
-
               if (!trackingInfo) {
                   return response.json({
                       code: 2,

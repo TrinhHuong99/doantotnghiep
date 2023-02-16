@@ -108,8 +108,8 @@
               v-if="listItem.content_type == 1"
               class="question-item"
             >
-              <span  class="badge mx-1 badge-info">{{ listItem.topic_type }}</span>
-              <span  class="badge badge-info">{{ listItem.level_type }}</span>
+              <span  class="badge mx-1 badge-info" v-if="listItem.topic_type != 0">{{ listItem.topic_type }}</span>
+              <span  class="badge badge-info" v-if="listItem.level_type != 0">{{ listItem.level_type }}</span>
               <div class="question-title d-flex justify-content-between">
                 <!-- <span class="question-count">Question {{ countQuestion(index, part.questions) }}</span> -->
                 <!-- <div
@@ -305,13 +305,13 @@ export default {
             ],
             levelTypeOption: [
                 { value: 0, text: 'Chọn Cấp độ' },
-                { value: 1, text: 'NB-TH' },
-                { value: 2, text: 'VD-VDC' }
+                { value: 1, text: 'Trung bình - Khá' },
+                { value: 2, text: 'Nâng Cao - Giỏi' }
             ],
         }
     },
     created() {
-        this.getTestInfo()
+        
         const self = this
         this.$http.get("/get-class")
         .then((response) => {
@@ -343,7 +343,7 @@ export default {
             })
             }
         })
-        // this.getTestInfo()
+        this.getTestInfo()
     },
     computed: {
         subjectSelectText() {
@@ -355,7 +355,6 @@ export default {
     },
     methods: {
         submitFile(event){
-
           this.file = event.target.files[0];
           //Add file to buffer
           const formData = new FormData();
@@ -541,6 +540,8 @@ export default {
                         for(let index1 = 0; index1 < this.testDetail.part[index].questions.length; index1++){
                             if(this.testDetail.part[index].questions[index1].topic_type != 0){
                                 this.testDetail.part[index].questions[index1].topic_type = this.topicTypeOption.find(el => el.value == this.testDetail.part[index].questions[index1].topic_type).text
+                            }
+                             if(this.testDetail.part[index].questions[index1].level_type != 0){
                                 this.testDetail.part[index].questions[index1].level_type = this.levelTypeOption.find(el => el.value == this.testDetail.part[index].questions[index1].level_type).text
                             }
                         }

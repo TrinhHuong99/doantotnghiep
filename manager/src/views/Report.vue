@@ -75,7 +75,7 @@
                         <div class="table-responsive">
                         <table class="table b-table table-striped table-hover">
                             <thead >
-                                <tr >
+                                <tr class="text-center">
                                     <th> Ca</th>
                                     <th  v-for="month1  in montharr">
                                         {{ month1 }}
@@ -84,8 +84,25 @@
                             </thead>
                             <tbody>
                                 <template v-for="val in distinceData">
-                                    <tr>
-                                        <td>Ca {{ val }}</td>
+                                    <tr class="text-center" >
+                                        <td v-if="val == 1 ">Ca {{ val }} 
+                                            <p>(21h00 hôm trước - 10h00 hôm sau)</p>
+                                        </td>
+                                        <td v-if="val == 2 ">Ca {{ val }}
+                                            <p>(10h00- 11h30)</p>
+                                        </td>
+                                         <td v-if="val == 3 ">Ca {{ val }} 
+                                            <p>(11h30 - 15h30)</p>
+                                        </td>
+                                        <td v-if="val == 4 ">Ca {{ val }}
+                                            <p>(15h30 - 17h00)</p>
+                                        </td>
+                                        <td v-if="val == 5 ">Ca {{ val }}
+                                            <p>(18h00 - 19h30)</p>
+                                        </td>
+                                        <td v-if="val == 6 ">Ca {{ val }}
+                                            <p>(19h30 - 21h00)</p>
+                                        </td>
                                         <td v-for="month2 in montharr">
                                             {{ getValue(month2, val) }}
                                         </td>
@@ -190,7 +207,7 @@ export default {
             filter: null,
             sortDirection: "asc",
             sortBy: "",
-            date_from: this.dateToDateString(new Date()),
+            date_from: this.dateToDateString(new Date(Date.now() - 100 * 24 * 60 * 60 * 1000)),
             date_to: this.dateToDateString(new Date()),
             sortDesc: false,
             rows: [],

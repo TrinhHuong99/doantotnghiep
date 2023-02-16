@@ -6,33 +6,58 @@
       <b-link class="brand-logo">
         <vuexy-logo />
         <h2 class="brand-text text-primary ml-1">
-          MASTER TEST MANAGER
+          ICAN
         </h2>
       </b-link>
       <!-- /Brand logo-->
 
       <!-- Left Text-->
-      <b-col lg="8" class="d-none d-lg-flex align-items-center p-5">
+      <b-col
+        lg="8"
+        class="d-none d-lg-flex align-items-center p-5"
+      >
         <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
-          <b-img fluid :src="imgUrl" alt="Login V2" />
+          <b-img
+            fluid
+            :src="imgUrl"
+            alt="Login V2"
+          />
         </div>
       </b-col>
       <!-- /Left Text-->
 
       <!-- Login-->
-      <b-col lg="4" class="d-flex align-items-center auth-bg px-2 p-lg-5">
-        <b-col sm="8" md="6" lg="12" class="px-xl-2 mx-auto">
-          <b-card-title class="mb-1 font-weight-bold" title-tag="h2">
-            Welcome to MASTER TEST MANAGER 👋
+      <b-col
+        lg="4"
+        class="d-flex align-items-center auth-bg px-2 p-lg-5"
+      >
+        <b-col
+          sm="8"
+          md="6"
+          lg="12"
+          class="px-xl-2 mx-auto"
+        >
+          <b-card-title
+            class="mb-1 font-weight-bold"
+            title-tag="h2"
+          >
+            Welcome to ICAN 👋
           </b-card-title>
           <b-card-text class="mb-2">
             Vui lòng đăng nhập vào tài khoản của bạn và bắt đầu
           </b-card-text>
 
           <!-- form -->
-          <validation-observer ref="loginForm">
-            <b-button type="button" variant="primary" block @click="loginWithGoogle()">
-              Bấm để đăng nhập với tài khoản MASTER của bạn
+          <validation-observer
+            ref="loginForm"
+          >
+            <b-button
+              type="button"
+              variant="primary"
+              block
+              @click="loginWithGoogle()"
+            >
+              Bấm để đăng nhập với tài khoản HOCMAI của bạn
             </b-button>
           </validation-observer>
 
@@ -44,7 +69,7 @@
           </b-card-text> -->
         </b-col>
       </b-col>
-      <!-- /Login-->
+    <!-- /Login-->
     </b-row>
   </div>
 </template>
@@ -115,11 +140,11 @@ export default {
   },
   methods: {
     parseJwt(token) {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
 
-      return JSON.parse(jsonPayload);
+        return JSON.parse(jsonPayload);
     },
     loginWithGoogle() {
       this.$gAuth
@@ -146,8 +171,7 @@ export default {
               localStorage.setItem('userData', JSON.stringify(playload.data))
               this.$store.dispatch('app/updateUserData', playload.data)
               this.$ability.update(playload.data.ability)
-              console.log(playload.data)
-              this.$router.replace(getHomeRouteForLoggedInUser(playload.data.role))
+              this.$router.replace(getHomeRouteForLoggedInUser(playload.data.ability))
                 .then(() => {
                   this.$toast({
                     component: ToastificationContent,
@@ -162,17 +186,17 @@ export default {
                 })
             } else {
               this.$toast({
-                component: ToastificationContent,
-                props: {
-                  title: "Notification",
-                  icon: "InfoIcon",
-                  text: res.data.message,
-                  variant: "danger",
-                  position: "bottom-right",
-                },
-              });
+                    component: ToastificationContent,
+                    props: {
+                        title: "Notification",
+                        icon: "InfoIcon",
+                        text: res.data.message,
+                        variant: "danger",
+                        position: "bottom-right",
+                    },
+                });
             }
-            console.log(res,'huong test')
+            console.log(res)
           })
 
           // const userInfo = {
@@ -203,7 +227,7 @@ export default {
               // ? This is just for demo purpose as well.
               // ? Because we are showing eCommerce app's cart items count in navbar
               this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
-              
+
               // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
               this.$router.replace(getHomeRouteForLoggedInUser(userData.role))
                 .then(() => {

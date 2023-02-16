@@ -4,11 +4,11 @@ export default [
     route: 'contact',
     icon: 'HomeIcon',
   },
-  {
-    title: 'Tạo tài khoản',
-    route: 'Tạo tài khoản',
-    icon: 'CalendarIcon',
-  },
+  // {
+  //   title: 'Tạo tài khoản',
+  //   route: 'Tạo tài khoản',
+  //   icon: 'CalendarIcon',
+  // },
   {
     title: 'Báo cáo năng suất',
     route: 'report',

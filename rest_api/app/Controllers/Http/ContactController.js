@@ -7,7 +7,7 @@ class ContactController {
         let { page, start, end, phone, email, classid, subjectid } = request.all()
 
         if (!page) {page = 1}
-        const limit = 50;
+        const limit = 20;
 
         let contactList = Database.table('contact')
         // .leftJoin('test_history', 'test_history.contact_id', 'contact.id')
@@ -59,7 +59,7 @@ class ContactController {
         let { page, start, end, phone  } = request.all()
 
         if (!page) {page = 1}
-        const limit = 50;
+        const limit = 20;
 
         let contactList = Database.table('contact_history')
         .join('contact', 'contact_history.contact_id', 'contact.id')

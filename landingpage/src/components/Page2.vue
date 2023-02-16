@@ -6,8 +6,8 @@
                     <div class="dotted">
                     </div>
                     <div class="title-rule">
-                        <span v-if="subjectid == 1" class="mt-4">QUY ĐỊNH LÀM BÀI MÔN TOÁN</span>
-                        <span v-if="subjectid != 1" class="mt-4">QUY ĐỊNH LÀM BÀI MÔN NGỮ VĂN</span>
+                        <span v-if="subjectid == 1" class="mt-4">QUY ĐỊNH LÀM BÀI </span>
+                        <span v-if="subjectid != 1" class="mt-4">QUY ĐỊNH LÀM BÀI </span>
                     </div>
                     <div class=" mt-4 mb-5 content-rule">
                         <p v-if="subjectid == 1">1. Bài thi gồm 30 câu hỏi trắc nghiệm theo phân phối chương trình của
@@ -16,7 +16,7 @@
                             và Đào tạo.</p>
                         <p v-if="subjectid == 1">2. Bài thi diễn ra trong thời gian 60 phút.</p>
                         <p v-if="subjectid != 1">2. Bài thi diễn ra trong thời gian 90 phút.</p>
-                        <p>3. Em nhớ ấn nút "Nộp bài" ở cuối để gửi lại bài cho HOCMAI.</p>
+                        <p>3. Em nhớ ấn nút "Nộp bài" ở cuối để gửi lại bài cho hệ thống MASTER nha.</p>
                         <p>4. Các em học sinh làm bài trong môi trường yên tĩnh, có kết nối mạng ổn định để đạt kết quả
                             tốt nhất.</p>
                     </div>

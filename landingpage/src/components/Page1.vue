@@ -31,7 +31,7 @@
             <h6>Xác nhận</h6>
             </template>
             <div class="d-block text-center">
-                <p class="confirm-info">Em đã làm bài thi này rồi. Hãy chọn môn khác hoặc lớp khác nhé </p>
+                <p class="confirm-info">Hiện chưa hoàn thành đề thi. Em Hãy chọn môn khác hoặc lớp khác nhé </p>
             
                 <b-button class="mb-3 btn-cf" variant="secondary" block @click="formCloseTested()">Em muốn chọn lại</b-button>
                     
@@ -78,6 +78,14 @@
                                 <b-form-select id="input-5" :options="subjectsOptions" v-model="form.subjectSelected" required ></b-form-select>
                             </b-form-group>
                             <b-form-invalid-feedback :state="subjectsState">Bạn vui lòng nhập môn học</b-form-invalid-feedback>
+                            <b-form-group class="mb-4" id="input-group-2" ref="topic" label-for="input-3">
+                                <b-form-select id="input-3" :options="topicOptions" v-model="form.topicSelected" required></b-form-select>
+                            </b-form-group>
+                            <b-form-invalid-feedback :state="topicState">Bạn vui lòng chọn chủ đề của môn học</b-form-invalid-feedback>
+                            <b-form-group class="mb-4" id="input-group-6" ref="type" label-for="input-3">
+                                <b-form-select id="input-5" :options="typeOptions" v-model="form.typeSelected" required></b-form-select>
+                            </b-form-group>
+                            <b-form-invalid-feedback :state="typeState">Bạn vui lòng nhập chọn mức độ muốn tham gia thi</b-form-invalid-feedback>
                             <b-form-group id="input-group-3" label-for="input-2">
                                 <b-form-input id="input-2" v-model="form.phone" name="phone" ref="phone" :state ="phoneState" placeholder="Số điện thoại (*)" required ></b-form-input>
                             </b-form-group>
@@ -191,6 +199,8 @@ export default {
                 locationSelected: 'hn',
                 classSelected: 0,
                 subjectSelected: 0,
+                topicSelected: 0,
+                typeSelected: 0,
                 school: [],
                 scoreMedium: [],
                 learned: [],
@@ -212,6 +222,14 @@ export default {
                 // { value: '7', text: 'Lớp 7' },
                 // { value: '8', text: 'Lớp 8' },
                 // { value: '9', text: 'Lớp 9' },
+            ],
+            topicOptions: [
+                { value: 0, text: 'Chủ đề (*)' }
+            ],
+            typeOptions: [
+                { value: 0, text: 'Mức độ đề thi (*)' },
+                { value: 1, text: 'Trung bình - Khá' },
+                { value: 2, text: 'Nâng cao - Giỏi' },
             ],
             subjectsOptions: [
                 { value: 0, text: 'Môn học (*)' },
@@ -250,6 +268,7 @@ export default {
             }
             this.form.subjectSelected = 0
         })
+        // this.getTopicType()
     },
     computed: {
         subjectSelectText() {
@@ -335,6 +354,26 @@ export default {
                 return true
             }
         },
+        typeState() {
+            if (!this.nextButtonPress) {
+                return null
+            }
+            if (this.form.typeSelected == 0) {
+                return false;
+            } else {
+                return true
+            }
+        },
+        topicState() {
+            if (!this.nextButtonPress) {
+                return null
+            }
+            if (this.form.topicSelected == 0) {
+                return false;
+            } else {
+                return true
+            }
+        },
         checkLearned() {
 
             if (!this.startButtonPress) {
@@ -366,6 +405,26 @@ export default {
         },
     },
     methods: {
+        getTopicType(){
+            this.$http.get("/get-topic-type", {
+                    params: {
+                        classid: this.form.classSelected,
+                        subjectid: this.form.subjectSelected
+                    }
+                })
+                .then((response) => {
+                    if (response.data.data.length > 0) {
+                        console.log(response, 'response')
+                        response.data.data.forEach(function (value) {
+                            if (value.status == 1) {
+                            console.log(value, 'value')
+                                this.topicOptions.push({ value: value.id, text: value.name })
+                            }
+                        })
+                    }
+                this.form.topicSelected = 0
+            })
+        },
         validEmail(email) {
             var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);

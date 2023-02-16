@@ -83,7 +83,9 @@
                             <tbody>
                                 <template v-for="val in distinceData">
                                     <tr>
-                                        <td>{{ val.name }}</td>
+                                        <td>
+                                            {{ val.name }}
+                                        </td>
                                         <td v-for="room in val.examAmount">
                                             {{ room }}
                                         </td>
@@ -198,7 +200,7 @@ export default {
             filter: null,
             sortDirection: "asc",
             sortBy: "",
-            date_from: this.dateToDateString(new Date()),
+            date_from: this.dateToDateString(new Date(new Date().getFullYear(), 0, 1)),
             date_to: this.dateToDateString(new Date()),
             sortDesc: false,
             rows: [],
@@ -235,13 +237,14 @@ export default {
         async filterData() {
             const data = await this.fetchData()
             this.rows = data.data.data;
+
             const monthFrom = new Date(this.date_from)
             const monthTo = new Date(this.date_to)
             const monthLength = monthTo.getMonth() - monthFrom.getMonth()
             for (let index = 0; index < this.rows.length; index++) {
                 this.distinceData[this.rows[index].updated_by] = this.rows[index]
             }
-            
+
             Object.keys(this.distinceData).forEach((key) => {
                 let monthDataTemp = {}
                 for (let index = 0; index < monthLength + 1; index++) {
@@ -263,7 +266,7 @@ export default {
                 return a - b;
             });        
             console.log(this.distinceData)
-            console.log(this.montharr)
+            console.log(this.montharr,'this.montharr')
             // this.totalRows = data.data.data.total;
             // this.perPage = data.data.data.perPage;
         },
