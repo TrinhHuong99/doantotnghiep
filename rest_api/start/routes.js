@@ -55,7 +55,7 @@ Route.group(()=> {
     // Lấy câu hỏi
     // Route.get('/get-questions', 'TestController.getQuestion')
     Route.get('/get-questions', 'TestController.getQuestionNotCheckTested')
-    
+
     Route.get('/get-question-no-tracking', 'TestController.getQuestionNoTracking')
 
     // Lưu bài test

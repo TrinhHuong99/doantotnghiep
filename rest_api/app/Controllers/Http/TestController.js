@@ -473,13 +473,18 @@ class TestController {
 
     async getTopicType({ request, response }) {
         const { id, classid, subjectid } = request.all()
-        console.log(id, classid, subjectid, 'testttttt')
 
         const subjectsList = Database.table('topic_type')
+          .where('status', 1)
 
         if (id) {
             subjectsList.where('id', id)
-            .first()
+        }
+        if (classid) {
+            subjectsList.where('class', classid)
+        }
+        if (subjectid) {
+            subjectsList.where('subject', subjectid)
         }
 
         return response.json({
@@ -1220,8 +1225,9 @@ class TestController {
 
     async getQuestionNotCheckTested ({ request, response }) {
 
-      const { tracking_id } = request.all()
+      const { tracking_id , topicid, typeid } = request.all()
       // const tracking_id = 'a171af81-4785-4871-8c63-36337883942f'
+      console.log(tracking_id, topicid, typeid, 'tetstttt')
       if (tracking_id) {
           try {
 
@@ -1257,6 +1263,8 @@ class TestController {
                 .select('id', 'content_type','topic_type','level_type', 'content', 'exam_part', 'option_data')
                 .where('status', 1)
                 .where('exam_id', examData.id)
+                .where('topic_type', topicid)
+                .where('level_type', typeid)
                 .orderBy('position', 'asc')
 
             let exam = examData;

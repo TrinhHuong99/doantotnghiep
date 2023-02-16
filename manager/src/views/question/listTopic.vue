@@ -44,6 +44,12 @@
                         <template #cell(name)="data">
                             <div class="question-content" v-html="data.value"></div>
                         </template>
+                        <template #cell(class)="data">
+                            <div class="question-content" v-html="data.value"></div>
+                        </template>
+                        <template #cell(subject)="data">
+                            <div class="question-content" v-html="data.value"></div>
+                        </template>
                         <template #cell(status)="data">
                             <b-badge :variant="data.value == 1 ? 'success' : 'warning' ">{{ data.value == 1 ? "Xuất bản" : "Ẩn" }}</b-badge>
                         </template>
@@ -138,13 +144,44 @@ export default {
             fields: [
                 { label: "ID", key: "id" },
                 { label: "Name", key: "name" },
+                { label: "Class", key: "class" },
+                { label: "Subject", key: "subject" },
                 { label: "Status", key: "status" },
                 { label: "Action", key: "action" },
             ],
             rows: [],
             totalRows: 1,
             currentPage: 1,
+            classOptions: [
+                { value: null, text: 'Hãy chọn Lớp' },
+            ],
+            subjectsOptions: [
+                { value: null, text: 'Hãy chọn Môn' },
+            ],
         };
+    },
+    async mounted() {
+        const self = this
+        await this.$http.get("/get-class")
+            .then((response) => {
+                if (response.data.data.length > 0) {
+                    response.data.data.forEach(function (value) {
+                        if (value.status == 1) {
+                            self.classOptions.push({ value: value.id, text: value.name })
+                        }
+                    })
+                }
+            })
+        await this.$http.get("/get-subject")
+            .then((response) => {
+                if (response.data.data.length > 0) {
+                    response.data.data.forEach(function (value) {
+                        if (value.status == 1) {
+                            self.subjectsOptions.push({ value: value.id, text: value.name })
+                        }
+                    })
+                }
+            })
     },
     computed: {
         statusVariant() {
@@ -167,6 +204,18 @@ export default {
         this.$http.get("/get-topic-type").then((res) => {
             if (res.data.code === 1) {
                 this.rows = res.data.data;
+                for (let index = 0; index < this.rows.length; index++) {
+                    console.log(this.rows[index].class);
+                    console.log(this.classOptions);
+                    if (this.rows[index].class != 0) {
+                        this.rows[index].class = this.classOptions.find(el => el.value == this.rows[index].class).text
+                        this.rows[index].subject = this.subjectOptions.find(el => el.value == this.rows[index].subject).text
+                    }
+                }
+                console.log(this.rows);
+                // res.data.data.classid = this.classOptions.find(el => el.value == res.data.data.classid).text
+                // res.data.data.subjectid = this.subjectsOptions.find(el => el.value == res.data.data.subjectid).text
+                // this.rows = res.data.data;
                 this.totalRows = this.rows.length;
             }
         });

@@ -71,11 +71,11 @@
                             </b-form-group>
                             <b-form-invalid-feedback :state="ageState">Bạn vui lòng nhập môn lớp</b-form-invalid-feedback> -->
                             <b-form-group class="mb-4" id="input-group-3" ref="class"  label-for="input-3">
-                                <b-form-select id="input-3" :options="classOptions" v-model="form.classSelected" required ></b-form-select>
+                                <b-form-select id="input-3" :options="classOptions" @change="getTopicType" v-model="form.classSelected" required ></b-form-select>
                             </b-form-group>
                             <b-form-invalid-feedback :state="classState">Bạn vui lòng chọn lớp</b-form-invalid-feedback>
                             <b-form-group class="mb-4" id="input-group-5"  ref="subject" label-for="input-3">
-                                <b-form-select id="input-5" :options="subjectsOptions" v-model="form.subjectSelected" required ></b-form-select>
+                                <b-form-select id="input-5" :options="subjectsOptions"  @change="getTopicType" v-model="form.subjectSelected" required ></b-form-select>
                             </b-form-group>
                             <b-form-invalid-feedback :state="subjectsState">Bạn vui lòng nhập môn học</b-form-invalid-feedback>
                             <b-form-group class="mb-4" id="input-group-2" ref="topic" label-for="input-3">
@@ -216,12 +216,6 @@ export default {
             ],
             classOptions: [
                 { value: 0, text: 'Lớp (*)' },
-                // { value: '4', text: 'Lớp 4' },
-                // { value: '5', text: 'Lớp 5' },
-                // { value: '6', text: 'Lớp 6' },
-                // { value: '7', text: 'Lớp 7' },
-                // { value: '8', text: 'Lớp 8' },
-                // { value: '9', text: 'Lớp 9' },
             ],
             topicOptions: [
                 { value: 0, text: 'Chủ đề (*)' }
@@ -233,8 +227,6 @@ export default {
             ],
             subjectsOptions: [
                 { value: 0, text: 'Môn học (*)' },
-                // { value: '1', text: 'Toán' },
-                // { value: 'van', text: 'Ngữ văn' },
             ],
             show: true,
             nextButtonPress: false,
@@ -268,7 +260,7 @@ export default {
             }
             this.form.subjectSelected = 0
         })
-        // this.getTopicType()
+        this.getTopicType()
     },
     computed: {
         subjectSelectText() {
@@ -405,7 +397,11 @@ export default {
         },
     },
     methods: {
-        getTopicType(){
+        getTopicType() {
+            const self = this
+            self.topicOptions = [
+                { value: 0, text: 'Chủ đề (*)' }
+            ];
             this.$http.get("/get-topic-type", {
                     params: {
                         classid: this.form.classSelected,
@@ -414,11 +410,9 @@ export default {
                 })
                 .then((response) => {
                     if (response.data.data.length > 0) {
-                        console.log(response, 'response')
                         response.data.data.forEach(function (value) {
                             if (value.status == 1) {
-                            console.log(value, 'value')
-                                this.topicOptions.push({ value: value.id, text: value.name })
+                                self.topicOptions.push({ value: value.id, text: value.name })
                             }
                         })
                     }
@@ -531,7 +525,8 @@ export default {
                     this.$http.get('/get-questions', {
                         params: {
                             tracking_id: trackid,
-                            // contact_id: res.data.data,
+                            topicid: this.form.topicSelected,
+                            typeid: this.form.typeSelected
                         }
                     }).then(res => {
                         if (res.data.code == 1) {

@@ -293,15 +293,6 @@ export default {
             subjectsOptions :[],
             topicTypeOption: [
                 { value: 0, text: 'Chọn chủ đề' },
-                // { value: 1, text: 'Số tự nhiên' },
-                // { value: 2, text: 'Phân Số' },
-                // { value: 3, text: 'Đơn vị đo' },
-                // { value: 4, text: 'Hình học' },
-                // { value: 5, text: 'Giải toán' },
-                // { value: 6, text: 'Biểu đồ' },
-                // { value: 7, text: 'Dấu hiệu chia hết' },
-                // { value: 8, text: 'Tự chủ tự học' },
-                // { value: 9, text: 'Giao tiếp - tương tác' },
             ],
             levelTypeOption: [
                 { value: 0, text: 'Chọn Cấp độ' },

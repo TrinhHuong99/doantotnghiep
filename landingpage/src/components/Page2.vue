@@ -6,16 +6,14 @@
                     <div class="dotted">
                     </div>
                     <div class="title-rule">
-                        <span v-if="subjectid == 1" class="mt-4">QUY ĐỊNH LÀM BÀI </span>
-                        <span v-if="subjectid != 1" class="mt-4">QUY ĐỊNH LÀM BÀI </span>
+                        <span class="mt-4">QUY ĐỊNH LÀM BÀI </span>
                     </div>
                     <div class=" mt-4 mb-5 content-rule">
-                        <p v-if="subjectid == 1">1. Bài thi gồm 30 câu hỏi trắc nghiệm theo phân phối chương trình của
+                        <p v-if="subjectid != 2">1. Bài thi gồm {{ this.ruleQuestion.part[0].questions.length }} câu hỏi trắc nghiệm theo phân phối chương trình của
                             Bộ Giáo dục và Đào tạo.</p>
-                        <p v-if="subjectid != 1">1. Bài thi gồm các câu hỏi theo phân phối chương trình của Bộ Giáo dục
+                        <p v-if="subjectid == 2">1. Bài thi gồm các câu hỏi theo phân phối chương trình của Bộ Giáo dục
                             và Đào tạo.</p>
-                        <p v-if="subjectid == 1">2. Bài thi diễn ra trong thời gian 60 phút.</p>
-                        <p v-if="subjectid != 1">2. Bài thi diễn ra trong thời gian 90 phút.</p>
+                        <p >2. Bài thi diễn ra trong thời gian {{ this.ruleQuestion.part[0].time / 60 }} phút.</p>
                         <p>3. Em nhớ ấn nút "Nộp bài" ở cuối để gửi lại bài cho hệ thống MASTER nha.</p>
                         <p>4. Các em học sinh làm bài trong môi trường yên tĩnh, có kết nối mạng ổn định để đạt kết quả
                             tốt nhất.</p>
@@ -37,14 +35,15 @@ export default {
     data() {
         return {
             ruleQuestion: '',
-            subjectid: 1
+            subjectid: 1,
         }
     },
     mounted() {
         let questionData = localStorage.getItem('speakupTestData')
         questionData = JSON.parse(questionData)
-        console.log(questionData)
-        this.ruleQuestion = questionData.description
+        this.ruleQuestion = questionData
+        console.log(this.ruleQuestion)
+        console.log(this.ruleQuestion.part[0].time/60)
         if (questionData.subjectid) {
             this.subjectid = questionData.subjectid
         }

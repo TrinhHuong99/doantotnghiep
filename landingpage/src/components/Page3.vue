@@ -36,7 +36,7 @@
                         <!-- <b-col sm="6" class="left_header">
                             <div class="box_title">{{ this.partTitle }}</div>
                         </b-col> -->
-                        <b-col sm="3" class="d-flex justify-content-start right_header">
+                        <b-col sm="4" class="d-flex justify-content-start right_header">
                             <div class="box_time d-flex ">
                                 <div class="icon_clock">
                                     <img src="../assets/clock.png" alt="">
@@ -44,7 +44,7 @@
                                 <div class="time-end">{{ secondToMinute(couter) }}</div>
                             </div>
                         </b-col> 
-                        <b-col sm="3" class="d-flex justify-content-end right_header">
+                        <b-col sm="4" class="d-flex justify-content-end right_header">
                             <b-button @click="checkStep1()" variant="success">NỘP BÀI</b-button>
                         </b-col> 
                     </div>
