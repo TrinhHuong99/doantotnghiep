@@ -10,6 +10,18 @@
                                 Hãy nhập tên môn thi
                             </b-form-invalid-feedback>
                         </b-form-group>
+                        <b-form-group label="Lớp" label-for="exam-class">
+                            <b-form-select :state="examClassValidation" v-model="examModalData.classSelected" :options="classOptions" id="exam-class"></b-form-select>
+                            <b-form-invalid-feedback v-if="!examClassValidation" id="input-live-feedback">
+                                Hãy chọn lớp học
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+                        <b-form-group label="Môn" label-for="exam-subject">
+                            <b-form-select :state="examSubjectValidation" v-model="examModalData.subjectSelected" :options="subjectsOptions" id="exam-subject"></b-form-select>
+                            <b-form-invalid-feedback v-if="!examSubjectValidation" id="input-live-feedback">
+                                Hãy chọn môn học
+                            </b-form-invalid-feedback>
+                        </b-form-group>
                         <b-form-checkbox id="checkbox-1" v-model="examModalData.status" name="checkbox-1" value="1" unchecked-value="0">Xuất bản</b-form-checkbox>
                         <b-button class="mt-2" variant="primary" block @click="addClass()">XÁC NHẬN</b-button>
                     </b-col>
@@ -24,6 +36,18 @@
                             <b-form-input v-model="examModalData.name" :state="classNameValidation" id="exam-name" placeholder="Tên chủ đề"></b-form-input>
                             <b-form-invalid-feedback v-if="!classNameValidation" id="input-live-feedback">
                                 Hãy nhập tên chủ đề
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+                        <b-form-group label="Lớp" label-for="exam-class">
+                            <b-form-select :state="examClassValidation" v-model="examModalData.classSelected" :options="classOptions" id="exam-class"></b-form-select>
+                            <b-form-invalid-feedback v-if="!examClassValidation" id="input-live-feedback">
+                                Hãy chọn lớp học
+                            </b-form-invalid-feedback>
+                        </b-form-group>
+                        <b-form-group label="Môn" label-for="exam-subject">
+                            <b-form-select :state="examSubjectValidation" v-model="examModalData.subjectSelected" :options="subjectsOptions" id="exam-subject"></b-form-select>
+                            <b-form-invalid-feedback v-if="!examSubjectValidation" id="input-live-feedback">
+                                Hãy chọn môn học
                             </b-form-invalid-feedback>
                         </b-form-group>
                         <b-form-checkbox id="checkbox-1" class="mb-1" v-model="examModalData.status" name="checkbox-1" value="1" unchecked-value="0">Xuất bản</b-form-checkbox>
@@ -44,10 +68,10 @@
                         <template #cell(name)="data">
                             <div class="question-content" v-html="data.value"></div>
                         </template>
-                        <template #cell(class)="data">
+                        <template #cell(classid)="data">
                             <div class="question-content" v-html="data.value"></div>
                         </template>
-                        <template #cell(subject)="data">
+                        <template #cell(subjectid)="data">
                             <div class="question-content" v-html="data.value"></div>
                         </template>
                         <template #cell(status)="data">
@@ -132,8 +156,16 @@ export default {
         return {
             examModalData: {
                 name: "",
-                status: 1
+                status: 1,
+                classSelected: null,
+                subjectSelected: null,
             },
+            classOptions: [
+                { value: null, text: 'Hãy chọn Lớp' },
+            ],
+            subjectsOptions: [
+                { value: null, text: 'Hãy chọn Môn' },
+            ],
             pageLength: 10,
             dir: false,
             perPage: 20,
@@ -144,20 +176,14 @@ export default {
             fields: [
                 { label: "ID", key: "id" },
                 { label: "Name", key: "name" },
-                { label: "Class", key: "class" },
-                { label: "Subject", key: "subject" },
+                { label: "Class", key: "classid" },
+                { label: "Subject", key: "subjectid" },
                 { label: "Status", key: "status" },
                 { label: "Action", key: "action" },
             ],
             rows: [],
             totalRows: 1,
             currentPage: 1,
-            classOptions: [
-                { value: null, text: 'Hãy chọn Lớp' },
-            ],
-            subjectsOptions: [
-                { value: null, text: 'Hãy chọn Môn' },
-            ],
         };
     },
     async mounted() {
@@ -171,6 +197,7 @@ export default {
                         }
                     })
                 }
+                this.examModalData.classSelected = null
             })
         await this.$http.get("/get-subject")
             .then((response) => {
@@ -181,9 +208,29 @@ export default {
                         }
                     })
                 }
+                this.examModalData.subjectSelected = null
             })
+        this.getListTopic();
     },
     computed: {
+        classNameValidation() {
+            if (this.examModalData.name !== '') {
+                return true
+            }
+            return false
+        },
+        examClassValidation() {
+            if (this.examModalData.classSelected !== null) {
+                return true
+            }
+            return false
+        },
+        examSubjectValidation(){
+            if (this.examModalData.subjectSelected !== null) {
+                return true
+            }
+            return false
+        },
         statusVariant() {
             const statusColor = {
                 0: "light-warning",
@@ -192,55 +239,53 @@ export default {
 
             return (status) => statusColor[status];
         },
-        classNameValidation() {
-            if (this.examModalData.name !== '') {
-                return true
-            }
-            return false
-        },
     },
     created() {
-        const self = this
-        this.$http.get("/get-topic-type").then((res) => {
-            if (res.data.code === 1) {
-                this.rows = res.data.data;
-                for (let index = 0; index < this.rows.length; index++) {
-                    console.log(this.rows[index].class);
-                    console.log(this.classOptions);
-                    if (this.rows[index].class != 0) {
-                        this.rows[index].class = this.classOptions.find(el => el.value == this.rows[index].class).text
-                        this.rows[index].subject = this.subjectOptions.find(el => el.value == this.rows[index].subject).text
-                    }
-                }
-                console.log(this.rows);
-                // res.data.data.classid = this.classOptions.find(el => el.value == res.data.data.classid).text
-                // res.data.data.subjectid = this.subjectsOptions.find(el => el.value == res.data.data.subjectid).text
-                // this.rows = res.data.data;
-                this.totalRows = this.rows.length;
-            }
-        });
+        
     },
     methods: {
+        getListTopic() {
+            const self = this
+            this.$http.get("/get-topic-type").then((res) => {
+                if (res.data.code === 1) {
+                    this.rows = res.data.data;
+                    for (let index = 0; index < this.rows.length; index++) {
+                        if( this.rows[index].classid != 0){
+                            this.rows[index].classid =  self.classOptions.find(el => el.value == this.rows[index].classid).text
+                            this.rows[index].subjectid =  self.subjectsOptions.find(el => el.value == this.rows[index].subjectid).text
+                        }
+                    }
+                    this.totalRows = this.rows.length;
+                }
+            });
+        },
         openModalAdd() {
             this.examModalData = {
                 name: "",
                 status: 1,
+                classSelected: null,
+                subjectSelected: null,
             };
             this.$refs["modal-primary"].show();
         },
         openModalCLassEdit(id) {
             const index = this.rows.findIndex((r) => r.id === id);
+            this.rows[index].classid =  this.classOptions.find(el => el.text == this.rows[index].classid).value
+            this.rows[index].subjectid =  this.subjectsOptions.find(el => el.text == this.rows[index].subjectid).value
             this.examModalData = {
                 id,
                 name: this.rows[index].name,
                 status: this.rows[index].status,
+                classSelected: this.rows[index].classid,
+                subjectSelected: this.rows[index].subjectid,
             };
+            console.log(this.rows[index],'kkkkk')
             this.$refs["modal-edit-class"].show();
         },
         deleteItem(id) {
             this.$bvModal
                 .msgBoxConfirm(
-                    "Hành động này không hoàn tác được, bạn có xác nhận xóa đề thi này ?",
+                    "Hành động này không hoàn tác được, bạn có xác nhận xóa chủ đề này ?",
                     {
                         title: "Xác nhận",
                         size: "sm",
@@ -278,7 +323,7 @@ export default {
                 });
         },
         addClass() {
-            if (!this.examModalData.name) {
+            if (!this.examModalData.name || !this.examClassValidation  || !this.examSubjectValidation) {
                 this.$toast({
                     component: ToastificationContent,
                     props: {
@@ -297,9 +342,13 @@ export default {
                 .post("/create-topic-type", {
                     name: this.examModalData.name,
                     status: this.examModalData.status,
+                    classid: this.examModalData.classSelected,
+                    subjectid: this.examModalData.subjectSelected
                 })
                 .then((res) => {
                     if (res.data.code === 1) {
+                        res.data.data.classid = this.classOptions.find(el => el.value == res.data.data.classid).text
+                        res.data.data.subjectid = this.subjectsOptions.find(el => el.value == res.data.data.subjectid).text
                         this.rows.push(res.data.data);
                         this.$refs["modal-primary"].hide();
                         this.$toast({
@@ -321,6 +370,8 @@ export default {
                     id: this.examModalData.id,
                     name: this.examModalData.name,
                     status: this.examModalData.status,
+                    classid: this.examModalData.classSelected,
+                    subjectid: this.examModalData.subjectSelected,
                 })
                 .then((res) => {
                     if (res.data.code === 1) {
@@ -329,6 +380,10 @@ export default {
                         );
                         this.rows[index].name = res.data.data.name;
                         this.rows[index].status = res.data.data.status;
+                        res.data.data.classid = this.classOptions.find(el => el.value == res.data.data.classid).text
+                        res.data.data.subjectid = this.subjectsOptions.find(el => el.value == res.data.data.subjectid).text
+                        this.rows[index].classid = res.data.data.classid
+                        this.rows[index].subjectid = res.data.data.subjectid
                         this.$refs["modal-edit-class"].hide();
                         this.$toast({
                             component: ToastificationContent,

@@ -552,7 +552,6 @@ export default {
                         if( this.rows[index].classid != 0){
                             this.rows[index].classid =  this.classOptions.find(el => el.value == this.rows[index].classid).text
                             this.rows[index].subjectid =  this.subjectsOptions.find(el => el.value == this.rows[index].subjectid).text
-                            // this.rows[index].classid =  this.rows[index].classid.text 
                         }
                     }
                     this.totalRows = this.rows.length;

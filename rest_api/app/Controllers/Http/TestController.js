@@ -446,13 +446,15 @@ class TestController {
     }
 
     async createTopicType({ request, response }) {
-        const { name, status } = request.all()
+        const { name, status, classid, subjectid } = request.all()
 
         if (name) {
             const clasId = await Database.table('topic_type')
             .insert({
                 name,
-                status,
+                classid,
+                subjectid,
+                status
             })
             console.log(clasId)
             return response.json({
@@ -460,6 +462,8 @@ class TestController {
                 data: {
                     id: clasId[0],
                     name,
+                    classid,
+                    subjectid,
                     status,
                 }
             })
@@ -481,10 +485,10 @@ class TestController {
             subjectsList.where('id', id)
         }
         if (classid) {
-            subjectsList.where('class', classid)
+            subjectsList.where('classid', classid)
         }
         if (subjectid) {
-            subjectsList.where('subject', subjectid)
+            subjectsList.where('subjectid', subjectid)
         }
 
         return response.json({
@@ -494,7 +498,7 @@ class TestController {
     }
 
     async editTopicType({ request, response }) {
-        const { id, name, status} = request.all()
+        const { id, name, classid, subjectid, status} = request.all()
 
         if (id && name) {
             const exampPart = await Database.table('topic_type')
@@ -502,6 +506,8 @@ class TestController {
             .update({
                 name,
                 status,
+                classid,
+                subjectid
             })
 
             return response.json({
@@ -510,6 +516,8 @@ class TestController {
                     id,
                     name,
                     status,
+                    classid,
+                    subjectid
                 }
             })
         }
