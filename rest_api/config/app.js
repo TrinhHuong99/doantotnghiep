@@ -22,16 +22,23 @@ module.exports = {
    * Assets base url
    * consists of /
    */
-
   BASE_URL: {
-    UPLOAD_URL: Env.get('UPLOAD_URL', 'http://127.0.0.1:3333/elt-uploads')
+    UPLOAD_URL: Env.get('UPLOAD_URL', 'http://127.0.0.1:3333/elt-uploads'),
+    UPLOAD_SPEAK_URL: Env.get('UPLOAD_SPEAK_URL', 'http://127.0.0.1:3333/speak-uploads')
   },
 
   // base_url của server hiện tại
   BASE_URL_OF_SERVER: 'UPLOAD_URL',
-
-  GG_AUDIENCE: Env.get('GG_AUDIENCE', '')
-  ,
+  // base minio
+  BASE_MINIO: {
+    url: Env.get('STATIC_SITE_MINIO'),
+    access_key: Env.get('ACCESS_KEY'),
+    secret_key: Env.get('SECRET_KEY'),
+    bucket: 'elt-ems'
+  },
+  Sendgrid: {
+    SENDGRID_API_KEY: Env.get('SENDGRID_API_KEY') || ''
+  },
   /*
   |--------------------------------------------------------------------------
   | App Key

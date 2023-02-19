@@ -59,8 +59,12 @@
             <input hidden type="file" name="file" ref="fileInput"  id="" @change="submitFile($event)" class="input-file">
           </div>
         </b-col>
+        <!-- <b-col cols="3" class="mb-1">
+        </b-col>
         <b-col cols="3" class="mb-1">
-          <!-- <b-button  class="mt-2" variant="primary" block @click="submitFile()">XÁC NHẬN</b-button> -->
+        </b-col> -->
+        <b-col cols="3" class="mb-1">
+          <b-button  class="mt-2" variant="primary" block @click="emailSendHandle()">Gửi Mail kết quả</b-button>
         </b-col>
       </b-row>
     </b-card>
@@ -344,7 +348,41 @@ export default {
             return this.classOptions.find(el => el.value == this.testData.test_result.classid) || { text: ''}
         },
     },
-    methods: {
+  methods: {
+    async emailSendHandle() {
+      this.$http.post('/email/send-test', {
+        merge_data: 'Data',
+        title: 'Thông báo điểm thi',
+        email_html: 'Test thi thử ',
+        email_to: 'huong.trinhthi@vti.com.vn',
+        email_from_name: 'trinhhuong29071999@gmail.com'
+      })
+        .then((resp) => {
+          if (resp.data.code === 1) {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: "Notification",
+                icon: "InfoIcon",
+                text: "Gửi thành công",
+                variant: "success",
+                position: "bottom-right",
+              },
+            });
+          } else {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: "Notification",
+                icon: "InfoIcon",
+                text: resp.data.msg,
+                variant: "danger",
+                position: "bottom-right",
+              },
+            });
+          }
+        })
+    },
         submitFile(event){
           this.file = event.target.files[0];
           //Add file to buffer
@@ -354,7 +392,7 @@ export default {
             this.$http.post('uploads', formData,
               {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multispart/form-data'
                 }
               }
             )

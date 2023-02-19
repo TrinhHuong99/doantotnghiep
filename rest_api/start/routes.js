@@ -143,7 +143,21 @@ Route.group(()=> {
     Route.get('/report/product-report', 'ReportController.productReport')
     Route.get('/report/teacher-report', 'ReportController.teacherReport')
 
-    Route.get('/test', 'TrackController.pushContactToCrmm')
+  Route.get('/test', 'TrackController.pushContactToCrmm')
+
+   // email api
+    Route.get('/email/list', 'EmailController.emailListHandle')
+    Route.post('/email/store', 'EmailController.emailStoreHandle')
+    Route.get('/email/:id', 'EmailController.getEmailWidthId')
+    Route.post('/email/send-test', 'EmailController.sendTest')
+    Route.post('/email/:id/duplicate', 'EmailController.templateDuplicate')
+    Route.post('/email/:id/delete', 'EmailController.templateDelete')
+
+    // email api
+    Route.get('/email/list', 'EmailController.emailListHandle')
+    Route.post('/email/store', 'EmailController.emailStoreHandle')
+    Route.get('/email/:id', 'EmailController.getEmailWidthId')
+    Route.post('/email/send-test', 'EmailController.sendTest')
 }).prefix('/api')
 
 
