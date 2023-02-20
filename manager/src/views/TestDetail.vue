@@ -350,16 +350,27 @@ export default {
     },
   methods: {
     async emailSendHandle() {
-      this.$http.post('/email/send-test', {
-        merge_data: 'Data',
-        title: 'Thông báo điểm thi',
-        email_html: 'Test thi thử ',
-        email_to: 'huong.trinhthi@vti.com.vn',
-        email_from_name: 'trinhhuong29071999@gmail.com'
-      })
+      if (!this.userInfo.email) {
+          this.$toast({
+              component: ToastificationContent,
+              props: {
+                  title: "Notification",
+                  icon: "InfoIcon",
+                  text: "Đích đến không được để trống",
+                  variant: "danger",
+                  position: "bottom-right",
+              },
+          });
+      } else {
+        const email_html = 'Data';
+        this.$http.post('/email/send-test', {
+          title: 'Thông báo điểm thi test Master',
+          email_html: email_html,
+          email_to: this.userInfo.email,
+          email_from_name: 'trinhhuong29071999@gmail.com'
+        })
         .then((resp) => {
-          if (resp.data.code === 1) {
-            this.$toast({
+          this.$toast({
               component: ToastificationContent,
               props: {
                 title: "Notification",
@@ -368,20 +379,9 @@ export default {
                 variant: "success",
                 position: "bottom-right",
               },
-            });
-          } else {
-            this.$toast({
-              component: ToastificationContent,
-              props: {
-                title: "Notification",
-                icon: "InfoIcon",
-                text: resp.data.msg,
-                variant: "danger",
-                position: "bottom-right",
-              },
-            });
-          }
+          });
         })
+      }
     },
         submitFile(event){
           this.file = event.target.files[0];
@@ -421,7 +421,6 @@ export default {
                
             })
             .catch(err => {
-                // this.uploadError = err.response;
                 this.$toast({
                     component: ToastificationContent,
                     props: {

@@ -145,32 +145,46 @@ class EmailController {
      */
 
     async sendTest ({ request, response }) {
-      const { merge_data, title, email_html, email_to, email_from_name } = request.all()
+      const { title, email_html, email_to, email_from_name } = request.all()
       const nodemailer = require('nodemailer');
+      if (email_html && title && email_to) {
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
+          auth: {
+            user: 'trinhhuong29071999@gmail.com',
+            pass: 'gmlwurjunmjtrdfn'
+          }
+        });
 
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: {
-          user: 'trinhhuong29071999@gmail.com',
-          pass: 'gmlwurjunmjtrdfn'
-        }
-      });
-      const mailOptions = {
-        from: 'trinhhuong29071999@gmail.com',
-        to: 'huong.trinhthi@vti.com.vn',
-        subject: 'Test email',
-        text: 'This is a test email from Nodemailer'
-      };
+        const mailOptions = {
+          from: email_from_name,
+          to: email_to,
+          subject: title,
+          title: title,
+          text: email_html
+        };
 
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            return response.json({
+                code: 0,
+                msg: 'Thiếu dữ liệu!'
+            })
+          } else {
+            console.log('Email sent: ' + info.response);
+
+          }
+        });
+        return response.json({
+          code: 1,
+      })
+      }
+      return response.json({
+        code: 0,
+        msg: 'Thiếu dữ liệu!'
+      })
       // console.log(sgMail)
       //   if (email_html && title && merge_data) {
       //       const emailContent = this.emailHtmlContentMerge({
@@ -191,10 +205,6 @@ class EmailController {
       //       })
       //   }
 
-      //   return response.json({
-      //       code: 0,
-      //       msg: 'Thiếu dữ liệu!'
-      //   })
     }
 
     sendEmailScript (site_id, action, mail_to, data) {
