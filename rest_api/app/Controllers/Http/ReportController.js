@@ -149,18 +149,18 @@ class ReportController {
           .leftJoin('exam', 'test_history.exam_id', 'exam.id')
           .leftJoin('users', 'test_history.updated_by', 'users.id')
           .where('test_history.mark_status', 1)
-          .groupByRaw('test_history.updated_by, MONTH(test_history.created_at) ')
+          .groupByRaw('test_history.updated_by, MONTH(test_history.updated_at) ')
           .count('* as total')
-          .orderByRaw('MONTH(test_history.created_at) ASC')
-          .select(Database.raw('test_history.updated_by, MONTH(test_history.created_at) as month, users.name'))
+          .orderByRaw('MONTH(test_history.updated_at) ASC')
+          .select(Database.raw('test_history.updated_by, MONTH(test_history.updated_at) as month, users.name'))
           // .select(Database.raw('test_history.tick_status'))
 
         if (date_start) {
-            queryBuilder.where('test_history.created_at', '>', date_start + ' 00:00:00')
+            queryBuilder.where('test_history.updated_at', '>', date_start + ' 00:00:00')
         }
 
         if (date_end) {
-            queryBuilder.where('test_history.created_at', '<', date_end + ' 23:59:59')
+            queryBuilder.where('test_history.updated_at', '<', date_end + ' 23:59:59')
         }
 
         if (classid) {
@@ -183,7 +183,7 @@ class ReportController {
             for (let index = 0; index < resultData.length; index++) {
                 // resultData[index].learned = resultData[index].learned == 1 ? 'Đã học' : 'Chưa học'
                 // resultData[index].status = resultData[index].status == 1 ? 'Đã hoàn thành' : 'Chưa hoàn thành'
-                resultData[index].created_at = this.dateToTimeString(resultData[index].created_at) + '<br>' + this.dateToDateString(resultData[index].created_at)
+                resultData[index].updated_at = this.dateToTimeString(resultData[index].updated_at) + '<br>' + this.dateToDateString(resultData[index].updated_at)
             }
         } else {
             // resultData = await queryBuilder.paginate(page, limit)
