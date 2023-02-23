@@ -997,7 +997,7 @@ class TestController {
 
         let testDetail = await Database.table('test_history')
         .where('test_history.id', id)
-        .select('test_history.id', 'contact_history', 'test_history.confirm_phone', 'test_history.created_at', 'test_history.updated_at', 'test_history.test_result', 'test_history.time', 'test_history.contact_id','test_history.file_upload')
+        .select('test_history.id', 'test_history.mark_status', 'contact_history', 'test_history.confirm_phone', 'test_history.created_at', 'test_history.updated_at', 'test_history.test_result', 'test_history.time', 'test_history.contact_id','test_history.file_upload')
         .first();
 
         if (testDetail) {
@@ -1045,7 +1045,7 @@ class TestController {
               .where('id', id)
               .update({
                 file_upload: file_upload,
-                mark_status: 1,
+            //     mark_status: 1,
                 updated_by: auth.user.id
               })
 

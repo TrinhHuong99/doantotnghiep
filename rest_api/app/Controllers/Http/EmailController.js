@@ -3,6 +3,7 @@
 const Database = use('Database')
 const sgMail = require('@sendgrid/mail')
 const Config = use('Config');
+const { auth } = require('google-auth-library');
 // const Logger = use('Test/Logger');
 sgMail.setApiKey(Config.get('app.Sendgrid.SENDGRID_API_KEY'))
 const nodemailer = require('nodemailer');
@@ -144,8 +145,8 @@ class EmailController {
      * request
      */
 
-    async sendTest ({ request, response }) {
-      const { title, email_html, email_to, email_from_name } = request.all()
+    async sendTest ({ request, response, auth }) {
+      const { id, title, email_html, email_to, email_from_name } = request.all()
       const nodemailer = require('nodemailer');
       if (email_html && title && email_to) {
         const transporter = nodemailer.createTransport({
@@ -165,6 +166,12 @@ class EmailController {
           title: title,
           text: email_html
         };
+        await Database.table('test_history')
+        .where('id', id)
+        .update({
+          mark_status: 1,
+          updated_by: auth.user.id
+        })
 
         transporter.sendMail(mailOptions, function(error, info){
           if (error) {

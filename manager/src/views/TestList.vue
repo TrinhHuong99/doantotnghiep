@@ -41,7 +41,7 @@
                         </b-form-group>
                     </b-col>
                     <b-col md="3">
-                        <b-form-group  label="Đánh giá" class="mb-4"  ref="class"  label-for="input-3">
+                        <b-form-group  label="Gửi mail đánh giá" class="mb-4"  ref="class"  label-for="input-3">
                             <b-form-select id="input-3" :options="updateStatusOptions" v-model="updateStatusChoose"  ></b-form-select>
                         </b-form-group>
                     </b-col>
@@ -208,7 +208,7 @@ export default {
                 { label: "Ngày ghi nhận", key: "created_at" },
                 { label: "File đánh giá", key: "file_upload" },
                 { label: "Ngày đánh giá", key: "updated_at" },
-                { label: "Đánh giá", key: "mark_status" },
+                { label: "Gửi mail đánh giá", key: "mark_status" },
                 { label: "Người thực hiện", key: "update_by" },
             ],
         };

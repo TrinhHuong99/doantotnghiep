@@ -20,18 +20,18 @@
         <b-col sm="12">
           <p><b>Email:</b> {{ userInfo.email }}</p>
         </b-col>
-        <!-- <b-col sm="12">
-          <p><b>Đã học IELTS:</b> {{ userInfo.learned == 1 ? 'Đã học' : 'Chưa học' }}</p>
+         <b-col sm="12">
+          <p><b>Đã gửi mail đánh giá:</b> {{ testData.mark_status == 1 ? 'Đã gửi' : 'Chưa gửi' }}</p>
         </b-col>
-        <b-col sm="12">
+        <!-- <b-col sm="12">
           <p class="time-tag">
             <b>Các khung giờ:</b> <span
               v-for="(time, index) in testData.time"
               :key="index"
             >{{ time }}</span>
           </p>
-        </b-col>
-        <b-col sm="12">
+        </b-col> -->
+        <!-- <b-col sm="12">
           <p><b>Utm_source:</b> {{ userInfo.utm_source }}</p>
         </b-col>
         <b-col sm="12">
@@ -63,13 +63,14 @@
         </b-col>
         <b-col cols="3" class="mb-1">
         </b-col> -->
-        <b-col cols="3" class="mb-1">
-          <b-button  class="mt-2" variant="primary" block @click="emailSendHandle()">Gửi Mail kết quả</b-button>
+        <!-- <b-col cols="3" class="mb-1" v-if="testData.mark_status != 1"> -->
+        <b-col cols="3" class="mb-1" >
+          <b-button  v-if="link_file_result != ''"  class="mt-2" variant="primary" block @click="emailSendHandle()">Gửi Mail kết quả</b-button>
         </b-col>
       </b-row>
     </b-card>
     <b-card title="Chi tiết bài thi">
-      <div v-if="testDetail.subjectid == 1" class="test-result">
+      <div v-if="testDetail.subjectid != 2" class="test-result">
           Kết quả làm bài: <strong>{{ countResutlOfTest(testDetail.part) }}</strong>
       </div>
       <b-card-text
@@ -81,7 +82,7 @@
             <h5 style="color: #f75b00; font-weight: 700;">
             {{ part.name }}
             </h5>
-            <div  v-if="testDetail.subjectid == 1" class="test-part-result">
+            <div  v-if="testDetail.subjectid = 1" class="test-part-result">
                 Kết quả: <strong>{{ countResutlOfPart(part) }}</strong>
             </div>
         </div>
@@ -306,7 +307,6 @@ export default {
         }
     },
     created() {
-        
         const self = this
         this.$http.get("/get-class")
         .then((response) => {
@@ -362,8 +362,16 @@ export default {
               },
           });
       } else {
-        const email_html = 'Data';
+        let email_html = 'CHÚC MỪNG EM ĐÃ HOÀN THÀNH BÀI THI '+ this.testData.test_result.name + '';
+        email_html += ' - Môn : '+ this.subjectsOptions.find(el => el.value == this.testData.test_result.subjectid).text  +'';
+        email_html += ' - Lớp: '+ this.testData.test_result.classid;
+        if (this.testDetail.subjectid != 2) {
+          email_html += '- Kết quả bài làm thi: '+ this.countResutlOfTest(this.testDetail.part)  +'';
+        }
+        email_html += '- File đánh giá bài thi từ giáo viên: '+ this.link_file_result +'';
+
         this.$http.post('/email/send-test', {
+          id: this.$route.params.id,
           title: 'Thông báo điểm thi test Master',
           email_html: email_html,
           email_to: this.userInfo.email,
