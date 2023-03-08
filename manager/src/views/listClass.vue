@@ -45,7 +45,7 @@
                             <div class="question-content" v-html="data.value"></div>
                         </template>
                         <template #cell(status)="data">
-                            <b-badge :variant="data.value === 1 ? 'success' : 'warning' ">{{ data.value === 1 ? "Xuất bản" : "Ẩn" }}</b-badge>
+                            <b-badge :variant="data.value == 1 ? 'success' : 'warning' ">{{ data.value == 1 ? "Xuất bản" : "Ẩn" }}</b-badge>
                         </template>
 
                         <template #cell(action)="data">

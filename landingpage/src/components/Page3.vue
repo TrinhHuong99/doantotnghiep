@@ -5,8 +5,8 @@
             <h6>Lưu ý</h6>
             </template>
             <div class="d-block text-center">
-                <p class="confirm-info"  :class="{ van_question: this.subjectid != 1}">Em còn <code>{{ this.count }} </code>câu hỏi chưa hoàn thành. Em muốn kết thúc bài thi?</p>
-                 <p class="confirm-info line2"  :class="{ van_question_confirm: this.subjectid !== 1}">Em có  muốn kết thúc bài thi?</p>
+                <p class="confirm-info"  :class="{ van_question: this.subjectid == 2}">Em còn <code>{{ this.count }} </code>câu hỏi chưa hoàn thành. Em muốn kết thúc bài thi?</p>
+                 <p class="confirm-info line2"  :class="{ van_question_confirm: this.subjectid == 2}">Em có  muốn kết thúc bài thi?</p>
                 <b-button class="mb-3 btn-cf" variant="secondary" block @click="nextpage">
                     Em muốn kết thúc
                 </b-button>
@@ -29,7 +29,7 @@
                 </b-col>
             </b-row> -->
             <div class="d-flex content-mb">
-                <div class="box_test" :class="{ van_box: this.subjectid != 1}">
+                <div class="box_test" :class="{ van_box: this.subjectid == 2}">
                     <div class="dotted">
                     </div>
                     <div class="d-flex justify-content-between mx-4">
@@ -48,7 +48,7 @@
                             <b-button @click="checkStep1()" variant="success">NỘP BÀI</b-button>
                         </b-col> 
                     </div>
-                    <div class="part-descreption" v-if="Questions.description" v-html="Questions.description"></div>
+                    <div class="part-descreption pt-2 mx-4" v-if="Questions.description" v-html="Questions.description"></div>
                     <div class="question-lock-list" v-if="Questions.part_type == 0">
                         <!-- {{ questionList }} -->
                         <div class="question-block" v-for="(question, index) in questionList" :key="question.id">
@@ -91,7 +91,7 @@
                     <!-- <type2/> -->
                     <!-- <type4/> -->
                 </div>
-                <div class="box-questions" :class="{ van_question: this.subjectid != 1}"  v-if="Questions.part_type == 0">
+                <div class="box-questions" :class="{ van_question: this.subjectid == 2}"  v-if="Questions.part_type == 0">
                     <h5 class="text-center pt-4">Tổng số câu hỏi: {{ questionList.length }}</h5>
                     <div class="box-list-answer d-flex flex-wrap justify-content-center">
                         <div class="answer-block" v-for="(question,key) in questionList" :key="key" >
@@ -321,7 +321,7 @@ export default {
     }
     .question-lock-list{
         position: relative;
-        height: 600px;
+        /* height: 600px; */
         overflow: auto;
         margin-top: 15px;
     }

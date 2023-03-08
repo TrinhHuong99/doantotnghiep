@@ -1119,6 +1119,7 @@ class TestController {
 
         const { tracking_id } = request.all()
         // const tracking_id = 'a171af81-4785-4871-8c63-36337883942f'
+      console.log('test get question')
         if (tracking_id) {
             try {
 
@@ -1237,6 +1238,7 @@ class TestController {
       // const tracking_id = 'a171af81-4785-4871-8c63-36337883942f'
       console.log(tracking_id, topicid, typeid, 'tetstttt')
       if (tracking_id) {
+
           try {
 
               // get Contact info with tracking_id
@@ -1244,13 +1246,15 @@ class TestController {
               .join('tracking', 'tracking.contact_id', 'contact.id')
               .where('tracking.tracking_hash', tracking_id)
               // .where('tracking.contact_id', contact_id)
-              .first()
+                .first()
+
               if (!trackingInfo) {
                   return response.json({
                       code: 2,
                       data: 'Chưa có thông tin người dùng'
                   })
               }
+
               let classid = trackingInfo.classid
               let subjectid = trackingInfo.subjectid
 
@@ -1282,24 +1286,29 @@ class TestController {
 
               // Lay cau hoi cua part
               const questOfPart = questionData.filter(question => question.exam_part == exam.part[index].id)
+              if (questOfPart.length) {
+                // Add dap an vao cau hoi
+                for (let index1 = 0; index1 < questOfPart.length; index1++) {
+                  if (questOfPart[index1].content_type == 3) {
+                    questOfPart[index1].option_data = null
+                  } else {
+                    const optionParse = JSON.parse(questOfPart[index1].option_data)
+                    questOfPart[index1].number_answers = optionParse.filter(option => option.right_answer == true || option.right_answer == 'true').length
+                    optionParse.map(option => { delete option.right_answer })
+                    questOfPart[index1].option_data = optionParse
+                  }
+                  questOfPart[index1].answers = []
 
-              // Add dap an vao cau hoi
-              for (let index1 = 0; index1 < questOfPart.length; index1++) {
-                if (questOfPart[index1].content_type == 3) {
-                  questOfPart[index1].option_data = null
-                } else {
-                  const optionParse = JSON.parse(questOfPart[index1].option_data)
-                  questOfPart[index1].number_answers = optionParse.filter(option => option.right_answer == true || option.right_answer == 'true').length
-                  optionParse.map(option => { delete option.right_answer })
-                  questOfPart[index1].option_data = optionParse
+                  // Replace template
+                  // Base Url
+                  questOfPart[index1].content = Helper.replaceUrl(questOfPart[index1].content)
                 }
-                questOfPart[index1].answers = []
-
-                // Replace template
-                // Base Url
-                questOfPart[index1].content = Helper.replaceUrl(questOfPart[index1].content)
+              } else {
+                  return response.json({
+                    code: 0,
+                    data: 'Không có câu hỏi nào'
+                  })
               }
-
               exam.part[index].questions = questOfPart
 
             }

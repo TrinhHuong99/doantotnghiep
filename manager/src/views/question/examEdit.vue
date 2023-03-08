@@ -233,7 +233,7 @@
                         {{ examInfo.name }}
                         <span class="badge mx-1"
                             :class="{ 'badge-success': examInfo.status == 1, 'badge-warning': examInfo.status == 0 }">{{
-                                examInfo.status ? "Xuất bản" : "Ẩn"
+                                examInfo.status == 1 ? "Xuất bản" : "Ẩn"
                             }}</span>
                         <span class="badge badge-info">{{ classSelectText.text }}</span>
                         <span class="badge mx-1 badge-info">{{ subjectSelectText.text }}</span>
@@ -267,7 +267,7 @@
                                         {{ examp.name }}
                                         <span class="mx-1 badge"
                                             :class="{ 'badge-success': examp.status == 1, 'badge-warning': examp.status == 0 }">{{
-                                                examp.status ? "Xuất bản" : "Ẩn"
+                                                examp.status == 1 ? "Xuất bản" : "Ẩn"
                                             }}</span>
                                         <span class="badge badge badge-info">Time: {{
                                             secondToMinute(examp.time)

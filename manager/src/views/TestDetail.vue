@@ -63,8 +63,8 @@
         </b-col>
         <b-col cols="3" class="mb-1">
         </b-col> -->
-        <!-- <b-col cols="3" class="mb-1" v-if="testData.mark_status != 1"> -->
-        <b-col cols="3" class="mb-1" >
+        <b-col cols="3" class="mb-1" v-if="testData.mark_status != 1">
+        <!-- <b-col cols="3" class="mb-1" > -->
           <b-button  v-if="link_file_result != ''"  class="mt-2" variant="primary" block @click="emailSendHandle()">Gửi Mail kết quả</b-button>
         </b-col>
       </b-row>

@@ -5,7 +5,7 @@
             <h6>Xác nhận</h6>
             </template>
             <div class="d-block text-center">
-                <p class="confirm-info">Xác nhận tham gia làm bài test năng lực đầu vào môn <code>{{ subjectSelectText.text }}</code> lớp <code>{{ form.classSelected }}</code> </p>
+                <p class="confirm-info">Xác nhận tham gia làm bài test năng lực đầu vào môn <code>{{ subjectSelectText.text }}</code>  </p>
                 
                 <b-form-group v-if="reInputPhone" id="input-group-3" label-for="input-2">
                     <b-form-input
@@ -74,24 +74,24 @@
                                 <b-form-select id="input-3" :options="classOptions" @change="getTopicType" v-model="form.classSelected" required ></b-form-select>
                             </b-form-group>
                             <b-form-invalid-feedback :state="classState">Bạn vui lòng chọn lớp</b-form-invalid-feedback>
-                            <b-form-group class="mb-4" id="input-group-5"  ref="subject" label-for="input-3">
-                                <b-form-select id="input-5" :options="subjectsOptions"  @change="getTopicType" v-model="form.subjectSelected" required ></b-form-select>
+                            <b-form-group class="mb-4" id="input-group-5"  ref="subject" label-for="input-4">
+                                <b-form-select id="input-4" :options="subjectsOptions"  @change="getTopicType" v-model="form.subjectSelected" required ></b-form-select>
                             </b-form-group>
                             <b-form-invalid-feedback :state="subjectsState">Bạn vui lòng nhập môn học</b-form-invalid-feedback>
-                            <b-form-group class="mb-4" id="input-group-2" ref="topic" label-for="input-3">
-                                <b-form-select id="input-3" :options="topicOptions" v-model="form.topicSelected" required></b-form-select>
+                            <b-form-group v-show="show" class="mb-4" id="input-group-2" ref="topic" label-for="input-5">
+                                <b-form-select id="input-5" :options="topicOptions" v-model="form.topicSelected" required></b-form-select>
                             </b-form-group>
                             <b-form-invalid-feedback :state="topicState">Bạn vui lòng chọn chủ đề của môn học</b-form-invalid-feedback>
-                            <b-form-group class="mb-4" id="input-group-6" ref="type" label-for="input-3">
-                                <b-form-select id="input-5" :options="typeOptions" v-model="form.typeSelected" required></b-form-select>
+                            <b-form-group v-show="show" class="mb-4" id="input-group-6" ref="type" label-for="input-6">
+                                <b-form-select id="input-6" :options="typeOptions" v-model="form.typeSelected" required></b-form-select>
                             </b-form-group>
                             <b-form-invalid-feedback :state="typeState">Bạn vui lòng nhập chọn mức độ muốn tham gia thi</b-form-invalid-feedback>
-                            <b-form-group id="input-group-3" label-for="input-2">
-                                <b-form-input id="input-2" v-model="form.phone" name="phone" ref="phone" :state ="phoneState" placeholder="Số điện thoại (*)" required ></b-form-input>
+                            <b-form-group id="input-group-3" label-for="input-7">
+                                <b-form-input id="input-7" v-model="form.phone" name="phone" ref="phone" :state ="phoneState" placeholder="Số điện thoại (*)" required ></b-form-input>
                             </b-form-group>
                             <b-form-invalid-feedback :state="phoneState">Bạn vui lòng nhập đúng số điện thoại</b-form-invalid-feedback>
-                            <b-form-group id="input-group-4" label-for="input-2">
-                                <b-form-input id="input-2" v-model="form.email" name="email" ref="email" :state="emailState" placeholder="Email (*)" required ></b-form-input>
+                            <b-form-group id="input-group-4" label-for="input-8">
+                                <b-form-input id="input-8" v-model="form.email" name="email" ref="email" :state="emailState" placeholder="Email (*)" required ></b-form-input>
                             </b-form-group>
                             <b-form-invalid-feedback :state="emailState">Bạn vui lòng nhập đúng Email</b-form-invalid-feedback>
                             <!-- <b-form-radio-group ref="BasicCheckbox"
@@ -335,7 +335,6 @@ export default {
             }
         },
         subjectsState() {
-
             if (!this.nextButtonPress) {
                 return null
             }
@@ -347,24 +346,30 @@ export default {
             }
         },
         typeState() {
-            if (!this.nextButtonPress) {
-                return null
+            if (this.form.subjectSelected != 2) {
+                if (!this.nextButtonPress) {
+                    return null
+                }
+                if (this.form.typeSelected == 0) {
+                    return false;
+                } else {
+                    return true
+                }
             }
-            if (this.form.typeSelected == 0) {
-                return false;
-            } else {
-                return true
-            }
+            return true
         },
         topicState() {
-            if (!this.nextButtonPress) {
-                return null
+            if (this.form.subjectSelected != 2) {
+                if (!this.nextButtonPress) {
+                    return null
+                }
+                if (this.form.topicSelected == 0) {
+                    return false;
+                } else {
+                    return true
+                }
             }
-            if (this.form.topicSelected == 0) {
-                return false;
-            } else {
-                return true
-            }
+            return true
         },
         checkLearned() {
 
@@ -402,6 +407,11 @@ export default {
             self.topicOptions = [
                 { value: 0, text: 'Chủ đề (*)' }
             ];
+            if (this.form.subjectSelected == 2) {
+                this.form.topicSelected = 0;
+                this.show = false;
+                return;
+            }
             this.$http.get("/get-topic-type", {
                     params: {
                         classid: this.form.classSelected,
@@ -443,10 +453,12 @@ export default {
                 this.$refs.hoten.focus()
                 return
             }
-            // if(!this.ageState){
-            //     this.$refs.age.focus()
-            //     return
-            // }
+            if(!this.typeState){
+                return
+            }
+            if (!this.topicState) {
+                return
+            }
             if(!this.classState){
                 return
             }
