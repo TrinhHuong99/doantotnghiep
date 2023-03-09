@@ -112,10 +112,22 @@ import {
 export default {
     created() {
         this.fetchContact();
+        const self = this
+        this.$http.get("/get-class")
+        .then((response) => {
+            if (response.data.data.length > 0) {
+            response.data.data.forEach(function (value) {
+                if(value.status == 1){
+                    self.classOptions.push({ value: value.id, text: value.name })
+                }
+            })
+            }
+        })
     },
     data() {
         return {
             learnChoose: null,
+            classOptions:[],
             learnOptions: [
                 { value: null, text: "Tất cả" },
                 { value: "1", text: "Đã học" },
@@ -187,9 +199,13 @@ export default {
                 })
                 .then((resp) => {
                     this.rows = resp.data.data.data;
+                    for (let index = 0; index <  this.rows.length; index++) {
+                        this.rows[index].classid = this.classOptions.find(el => el.value == this.rows[index].classid).text
+                    }
                     console.log(this.rows)
                     this.totalRows = resp.data.data.total;
                     this.perPage = resp.data.data.perPage;
+
                 });
         },
         dateToDateString(dateText) {

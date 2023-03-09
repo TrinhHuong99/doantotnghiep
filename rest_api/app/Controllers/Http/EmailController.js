@@ -7,6 +7,7 @@ const { auth } = require('google-auth-library');
 // const Logger = use('Test/Logger');
 sgMail.setApiKey(Config.get('app.Sendgrid.SENDGRID_API_KEY'))
 const nodemailer = require('nodemailer');
+const fs = require('fs');
 
 const DB_SOURCE = 'email_template'
 
@@ -146,8 +147,11 @@ class EmailController {
      */
 
     async sendTest ({ request, response, auth }) {
-      const { id, title, email_html, email_to, email_from_name } = request.all()
+      const { id, title, email_html, email_to, email_from_name, pdf } = request.all()
       const nodemailer = require('nodemailer');
+      const fs = require("fs");
+      let pdf1 = "public/" + pdf.substring(22);
+      // console.log(pdf1, 'link pdf')
       if (email_html && title && email_to) {
         const transporter = nodemailer.createTransport({
           host: 'smtp.gmail.com',
@@ -164,7 +168,15 @@ class EmailController {
           to: email_to,
           subject: title,
           title: title,
-          text: email_html
+          html: email_html,
+          // html: '<h1>This is the HTML content of your email</h1><img src="cid:image1"/>',
+          attachments: [
+            {
+              filename: "Nhận xét thi thử Master.pdf",
+              content: fs.createReadStream(pdf1),
+              contentType: "application/pdf",
+            },
+          ],
         };
         await Database.table('test_history')
         .where('id', id)
