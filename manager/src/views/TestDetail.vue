@@ -63,8 +63,8 @@
         </b-col>
         <b-col cols="3" class="mb-1">
         </b-col> -->
-        <b-col cols="3" class="mb-1" v-if="testData.mark_status != 1">
-        <!-- <b-col cols="3" class="mb-1" > -->
+        <!-- <b-col cols="3" class="mb-1" v-if="testData.mark_status != 1"> -->
+        <b-col cols="3" class="mb-1" >
           <b-button  v-if="link_file_result != ''"  class="mt-2" variant="primary" block @click="emailSendHandle()">Gửi Mail kết quả</b-button>
         </b-col>
       </b-row>
@@ -362,20 +362,21 @@ export default {
               },
           });
       } else {
-        let email_html = 'CHÚC MỪNG EM ĐÃ HOÀN THÀNH BÀI THI '+ this.testData.test_result.name + '';
-        email_html += ' - Môn : '+ this.subjectsOptions.find(el => el.value == this.testData.test_result.subjectid).text  +'';
-        email_html += ' - Lớp: '+ this.testData.test_result.classid;
+        let email_html = '<h1 class="color: #cc3232;">CHÚC MỪNG EM ĐÃ HOÀN THÀNH BÀI THI '+ this.testData.test_result.name + '</h1>';
+        email_html += '<h4> - Môn : '+ this.subjectsOptions.find(el => el.value == this.testData.test_result.subjectid).text  +'</h4>';
+        email_html += ' <h4>- Lớp: '+ this.testData.test_result.classid +'</h4>';
         if (this.testDetail.subjectid != 2) {
-          email_html += '- Kết quả bài làm thi: '+ this.countResutlOfTest(this.testDetail.part)  +'';
+          email_html += '<h4>- Kết quả bài làm thi: '+ this.countResutlOfTest(this.testDetail.part)  +'</h4>';
         }
-        email_html += '- File đánh giá bài thi từ giáo viên: '+ this.link_file_result +'';
+        // email_html += '- File đánh giá bài thi từ giáo viên: '+ this.link_file_result +'';
 
         this.$http.post('/email/send-test', {
           id: this.$route.params.id,
           title: 'Thông báo điểm thi test Master',
           email_html: email_html,
           email_to: this.userInfo.email,
-          email_from_name: 'trinhhuong29071999@gmail.com'
+          email_from_name: 'trinhhuong29071999@gmail.com',
+          pdf: this.link_file_result
         })
         .then((resp) => {
           this.$toast({
