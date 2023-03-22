@@ -270,14 +270,16 @@ export default {
         },
         openModalCLassEdit(id) {
             const index = this.rows.findIndex((r) => r.id === id);
-            this.rows[index].classid =  this.classOptions.find(el => el.text == this.rows[index].classid).value
-            this.rows[index].subjectid =  this.subjectsOptions.find(el => el.text == this.rows[index].subjectid).value
+            let classid =  this.classOptions.find(el => el.text == this.rows[index].classid).value
+            // this.rows[index].classid =  this.classOptions.find(el => el.text == this.rows[index].classid).value
+            // this.rows[index].subjectid =  this.subjectsOptions.find(el => el.text == this.rows[index].subjectid).value
+            let subjectid =  this.subjectsOptions.find(el => el.text == this.rows[index].subjectid).value
             this.examModalData = {
                 id,
                 name: this.rows[index].name,
                 status: this.rows[index].status,
-                classSelected: this.rows[index].classid,
-                subjectSelected: this.rows[index].subjectid,
+                classSelected: classid,
+                subjectSelected: subjectid,
             };
             console.log(this.rows[index],'kkkkk')
             this.$refs["modal-edit-class"].show();

@@ -95,7 +95,7 @@
                             </template>
                             <template #cell(file_upload)="data">
                                 <!-- <router-link v-if="data.value" :to="'/t/'+data.item.test_id">Chi tiết</router-link> -->
-                                <div v-if="data.value"><a :href="data.value">Chi tiết </a></div>
+                                <div v-if="data.value"><a target="_blank" :href="data.value">Chi tiết </a></div>
                             </template>
                             <template #cell(created_at)="data">{{ dateToTimeString(data.value) }}<br>{{ dateToDateString(data.value) }}</template>
                             <template #cell(updated_at)="data">{{ dateToTimeString(data.value) }}<br>{{ dateToDateString(data.value) }}</template>

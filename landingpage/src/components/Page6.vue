@@ -149,7 +149,7 @@
                             </b-col>
                         </b-row> -->
                     </form>
-                    <div class="d-flex justify-content-center button-pg1 ">
+                    <div class="d-flex justify-content-center button-pg1 pb-5">
                         <b-button @click="nextpage" variant="success">Nộp Bài</b-button>
                     </div>  
                 </div>

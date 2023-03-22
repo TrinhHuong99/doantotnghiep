@@ -16,7 +16,10 @@
                 <!-- <p><i>Lưu ý: Mỗi email chỉ có 1 lượt làm bài. Nếu chọn EM MUỐN KẾT THÚC, em sẽ không thể quay trở lại</i></p> -->
             </div>
         </b-modal>
-        <b-container>
+        <b-col sm="4" class="left_header col-sm-11 mb-3 d-flex justify-content-end">
+            <button class="box_title" onclick="printJS('printJS-form', 'html')"> Tải đề thi </button>
+        </b-col>
+        <b-container id="printJS-form" ref="content">
              <!-- <b-row class="header-test d-flex align-items-center mb-3 mt-4">
               
                 <b-col sm="6" class="d-flex justify-content-end right_header">
@@ -29,13 +32,13 @@
                 </b-col>
             </b-row> -->
             <div class="d-flex content-mb">
-                <div class="box_test" :class="{ van_box: this.subjectid == 2}">
+                <div  class="box_test" :class="{ van_box: this.subjectid == 2}">
                     <div class="dotted">
                     </div>
+                    <div  class="text-center mb-3 ">
+                        <h2 style="font-weight: 800;" v-if="this.partTitle"> {{ this.partTitle }}</h2>
+                    </div>
                     <div class="d-flex justify-content-between mx-4">
-                        <!-- <b-col sm="6" class="left_header">
-                            <div class="box_title">{{ this.partTitle }}</div>
-                        </b-col> -->
                         <b-col sm="4" class="d-flex justify-content-start right_header">
                             <div class="box_time d-flex ">
                                 <div class="icon_clock">
@@ -122,6 +125,7 @@ import type1 from '@/components/type_questions/type1'
 // import editor from '@/components/editor'
 import type3 from '@/components/type_questions/type3'
 import type5 from '@/components/type_questions/type5'
+import print from 'print-js'
 export default {
     components : {
         type1,
